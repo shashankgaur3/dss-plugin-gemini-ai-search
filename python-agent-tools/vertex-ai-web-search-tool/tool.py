@@ -31,12 +31,19 @@ class VertexAIWebSearchTool(BaseAgentTool):
             response = self._ask_gemini(credentials, project, location, query)
             metadata = getattr((getattr(response, "candidates", None) or [None])[0], "grounding_metadata", None)
             searches = list(getattr(metadata, "web_search_queries", None) or [])
-            source_items = [
-                {"type": "SIMPLE_DOCUMENT", "title": web.title or web.uri, "url": web.uri,
-                 "textSnippet": web.title or web.uri}
-                for chunk in (getattr(metadata, "grounding_chunks", None) or [])
-                for web in [getattr(chunk, "web", None)] if web and web.uri
-            ]
+            snippets = {}
+            for support in getattr(metadata, "grounding_supports", None) or []:
+                text = getattr(getattr(support, "segment", None), "text", None)
+                for index in getattr(support, "grounding_chunk_indices", None) or []:
+                    if text:
+                        snippets.setdefault(index, []).append(text)
+            source_items = []
+            for index, chunk in enumerate(getattr(metadata, "grounding_chunks", None) or []):
+                web = getattr(chunk, "web", None)
+                if web and web.uri:
+                    title = web.title or web.uri
+                    source_items.append({"type": "SIMPLE_DOCUMENT", "title": title, "url": web.uri,
+                                         "textSnippet": " ".join(snippets.get(index, []))[:300] or title})
             if trace:
                 trace.outputs.update({"source_count": len(source_items), "web_search_query_count": len(searches), "answer_length": len(response.text or "")})
             sources = [{
