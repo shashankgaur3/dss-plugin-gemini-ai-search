@@ -1,6 +1,6 @@
 {
     // Plugin identifiers are globally unique and only contain A-Za-z0-9_-
-    "id": "vertex-ai-search",
+    "id": "gemini-ai-search",
 
     // It is highly recommended to use Semantic Versioning
     "version": "0.1.0",
@@ -18,7 +18,7 @@
         "provider": "shashank.gaur",
 
         // icon: must be one of the FontAwesome 5.15.4 icons, complete list here at https://fontawesome.com/v5/search?ic=free-collection
-        "icon": "fas fa-search",
+        "icon": "fab fa-google",
 
         // recipesCategory: optional, can be one of 'visual', 'code', 'genai' or 'other'
         // defines the category of the plugin in the right panel
