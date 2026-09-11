@@ -3,29 +3,29 @@
     "id": "vertex-ai-search",
 
     // It is highly recommended to use Semantic Versioning
-    "version": "0.0.1",
+    "version": "0.1.0",
 
     // Meta data for display purposes:
     "meta": {
         // label: name of the plugin as displayed, should be short
-        "label": "Vertex ai search",
+        "label": "Vertex AI web search",
 
         // description: longer string to help end users understand what this plugin does
-        "description": "",
+        "description": "Answer live public-web questions with Gemini Google Search grounding, using a Dataiku-managed Vertex AI connection.",
 
         "author": "shashank.gaur",
 
         "provider": "shashank.gaur",
 
         // icon: must be one of the FontAwesome 5.15.4 icons, complete list here at https://fontawesome.com/v5/search?ic=free-collection
-        "icon": "fas fa-puzzle-piece",
+        "icon": "fas fa-search",
 
         // recipesCategory: optional, can be one of 'visual', 'code', 'genai' or 'other'
         // defines the category of the plugin in the right panel
         "recipesCategory": "",
 
         // List of tags for filtering the list of plugins
-        "tags": [], //for example: ["Machine Learning", "NLP"]
+        "tags": ["Generative AI", "Agent Tools", "Vertex AI", "Web Search"],
 
         // URL where the user can learn more about the plugin
         "url": "",
