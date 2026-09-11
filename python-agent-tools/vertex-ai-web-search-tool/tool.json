@@ -2,13 +2,13 @@
 {
     "meta" : {
         // label: name of the agent tool as displayed, should be short
-        "label": "Vertex AI web search",
+        "label": "Gemini Web Search",
 
         // description: longer string to help end users understand what this agent tool does.
-        "description": "Answers public-web questions with Gemini using Google Search grounding and a Dataiku Vertex AI connection.",
+        "description": "Answers live public-web questions with Gemini on Vertex AI using Google Search grounding and a Dataiku OAuth connection.",
 
         // icon: must be one of the FontAwesome 5.15.4 icons, complete list here at https://fontawesome.com/v5/search?ic=free-collection
-        "icon": "fas fa-search"
+        "icon": "fab fa-google"
     },
 
     /* params:
@@ -23,10 +23,46 @@
     For the full list and for more details, see the documentation: https://doc.dataiku.com/dss/latest/plugins/reference/params.html
     */
     "params": [
-        {"name": "vertex_connection", "label": "Dataiku Vertex AI connection", "type": "CONNECTION", "mandatory": true, "searchable": true, "description": "Dataiku Google/Vertex connection. KEYPAIR and OAUTH authentication are supported."},
-        {"name": "gcp_project_id", "label": "Google Cloud project ID override", "type": "STRING", "mandatory": false, "description": "Optional. Uses the selected connection's projectId when left blank."},
-        {"name": "location", "label": "Vertex AI location override", "type": "STRING", "mandatory": false, "description": "Optional. Uses the selected connection's location or region when left blank."},
-        {"name": "model", "label": "Gemini model", "type": "STRING", "mandatory": false, "defaultValue": "gemini-2.5-flash", "description": "Vertex AI Gemini model that supports Google Search grounding."},
-        {"name": "temperature", "label": "Temperature", "type": "DOUBLE", "mandatory": false, "defaultValue": 0.3, "minD": 0, "maxD": 2, "description": "Generation temperature."}
+        {
+            "name": "vertex_connection",
+            "label": "Dataiku Vertex AI connection",
+            "type": "CONNECTION",
+            "mandatory": true,
+            "searchable": true,
+            "allowedConnectionTypes": ["VertexAILLM"],
+            "description": "Dataiku Vertex AI LLM connection configured with OAuth."
+        },
+        {
+            "name": "gcp_project_id",
+            "label": "Google Cloud project ID override",
+            "type": "STRING",
+            "mandatory": false,
+            "description": "Optional. Uses the selected connection's projectId when left blank."
+        },
+        {
+            "name": "location",
+            "label": "Vertex AI location override",
+            "type": "STRING",
+            "mandatory": false,
+            "description": "Optional. Uses the selected connection's location or region when left blank."
+        },
+        {
+            "name": "model",
+            "label": "Gemini model",
+            "type": "STRING",
+            "mandatory": false,
+            "defaultValue": "gemini-2.5-flash",
+            "description": "Vertex AI Gemini model that supports Google Search grounding."
+        },
+        {
+            "name": "temperature",
+            "label": "Temperature",
+            "type": "DOUBLE",
+            "mandatory": false,
+            "defaultValue": 0.3,
+            "minD": 0,
+            "maxD": 2,
+            "description": "Generation temperature."
+        }
     ]
 }

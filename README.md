@@ -1,4 +1,4 @@
-# Vertex AI web search agent tool
+# Gemini Web Search agent tool
 
 This Dataiku plugin provides a custom agent tool that calls Gemini on Vertex AI with
 Google Search grounding. It searches the live public web; it does **not** require or
@@ -7,18 +7,18 @@ search queries it generated, and the referenced source URLs.
 
 ## Configure
 
-1. Install the plugin and create an **Agent Tool** of type **Vertex AI web search**.
-2. Select a Dataiku Google/Vertex connection. Both `KEYPAIR` (the resolved service
-   account JSON) and `OAUTH` (the resolved OAuth access token) are supported. The
-   user who invokes the tool must be allowed to use that connection.
+1. Install the plugin and create an **Agent Tool** of type **Gemini Web Search**.
+2. Select a Dataiku Vertex AI LLM connection configured with `OAUTH`. `KEYPAIR`
+   (service-account) authentication is currently not supported. The user who invokes
+   the tool must be allowed to use that connection.
 3. The tool uses the connection `projectId` and `location`/`region` by default. Set
    either override only when required, then choose a Gemini model that supports
    Google Search grounding.
 4. Add the tool to a visual agent and describe when its knowledge base should be used.
 
-Credentials are constructed from the resolved Dataiku connection at invocation time:
-the service-account JSON for `KEYPAIR`, or a short-lived token for `OAUTH`. No
-credential is stored in the tool configuration or returned to the agent.
+The tool uses the short-lived OAuth token resolved from the Dataiku connection at
+invocation time. No credential is stored in the tool configuration or returned to the
+agent.
 
 The Google identity configured on the connection needs permission to search the
 specified Vertex AI service. Vertex AI and the Google Search grounding feature must

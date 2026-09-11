@@ -8,10 +8,10 @@
     // Meta data for display purposes:
     "meta": {
         // label: name of the plugin as displayed, should be short
-        "label": "Vertex AI web search",
+        "label": "Gemini Web Search",
 
         // description: longer string to help end users understand what this plugin does
-        "description": "Answer live public-web questions with Gemini Google Search grounding, using a Dataiku-managed Vertex AI connection.",
+        "description": "Answer live public-web questions with Gemini on Vertex AI using Google Search grounding and a Dataiku-managed OAuth connection.",
 
         "author": "shashank.gaur",
 
@@ -25,7 +25,7 @@
         "recipesCategory": "",
 
         // List of tags for filtering the list of plugins
-        "tags": ["Generative AI", "Agent Tools", "Vertex AI", "Web Search"],
+        "tags": ["Generative AI", "Agent Tools", "Gemini", "Vertex AI", "Web Search"],
 
         // URL where the user can learn more about the plugin
         "url": "",
