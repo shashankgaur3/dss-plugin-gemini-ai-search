@@ -22,18 +22,35 @@ class VertexAIWebSearchTool(BaseAgentTool):
 
     def invoke(self, input, trace):
         query = self._required(input.get("input", {}), "query")
-        credentials, project, location = self._connection_credentials()
-        response = self._ask_gemini(credentials, project, location, query)
-        metadata = getattr((getattr(response, "candidates", None) or [None])[0], "grounding_metadata", None)
-        sources = [
-            {"title": web.title or web.uri, "url": web.uri}
-            for chunk in (getattr(metadata, "grounding_chunks", None) or [])
-            for web in [getattr(chunk, "web", None)] if web and web.uri
-        ]
-        return {
-            "output": {"answer": response.text, "web_search_queries": list(getattr(metadata, "web_search_queries", None) or []), "sources": sources},
-            "sources": [{"toolCallDescription": s["title"], "url": s["url"]} for s in sources],
-        }
+        if trace:
+            trace.span["name"] = "VERTEX_AI_GOOGLE_SEARCH_TOOL_CALL"
+            trace.inputs["query"] = query
+            trace.attributes["config"] = {key: self.config.get(key) for key in ("vertex_connection", "gcp_project_id", "location", "model", "temperature")}
+        try:
+            credentials, project, location = self._connection_credentials()
+            response = self._ask_gemini(credentials, project, location, query)
+            metadata = getattr((getattr(response, "candidates", None) or [None])[0], "grounding_metadata", None)
+            searches = list(getattr(metadata, "web_search_queries", None) or [])
+            source_items = [
+                {"type": "SIMPLE_DOCUMENT", "title": web.title or web.uri, "url": web.uri,
+                 "textSnippet": web.title or web.uri}
+                for chunk in (getattr(metadata, "grounding_chunks", None) or [])
+                for web in [getattr(chunk, "web", None)] if web and web.uri
+            ]
+            if trace:
+                trace.outputs.update({"source_count": len(source_items), "web_search_query_count": len(searches), "answer_length": len(response.text or "")})
+            sources = [{
+                "toolCallDescription": "Performed Gemini Google Search grounding for: {}".format(query),
+                "items": source_items,
+            }] if source_items else []
+            return {
+                "output": {"answer": response.text, "web_search_queries": searches, "sources": source_items},
+                "sources": sources,
+            }
+        except Exception as error:
+            if trace:
+                trace.outputs["error"] = str(error)
+            raise
 
     def load_sample_query(self, tool):
         return {"query": "What are the most recent James Webb Space Telescope updates this month?"}
