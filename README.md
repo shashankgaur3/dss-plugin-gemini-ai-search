@@ -8,9 +8,8 @@ search queries it generated, and the referenced source URLs.
 ## Configure
 
 1. Install the plugin and create an **Agent Tool** of type **Gemini Web Search**.
-2. Select a Dataiku Vertex AI LLM connection configured with `OAUTH`. `KEYPAIR`
-   (service-account) authentication is currently not supported. The user who invokes
-   the tool must be allowed to use that connection.
+2. Select a Dataiku Vertex AI LLM connection configured with `OAUTH`. The user who
+   invokes the tool must be allowed to use that connection.
 3. The tool uses the connection `projectId` and `location`/`region` by default. Set
    either override only when required, then choose a Gemini model that supports
    Google Search grounding.
@@ -32,20 +31,3 @@ be enabled for the chosen project, model, and region.
 
 The tool is stateless: each call is a new grounded Gemini request. The visual agent
 retains the user conversation and supplies the focused query for each tool call.
-
-## Test outside Dataiku with ADC
-
-The standalone test script uses Google Application Default Credentials (ADC), rather
-than a Dataiku connection. Install its dependency, authenticate with Google Cloud,
-and run it from the plugin root:
-
-```bash
-python3 -m pip install 'google-genai>=1.0.0,<2.0.0'
-gcloud auth application-default login
-python3 scripts/test_google_search_grounding.py \
-  --project YOUR_GCP_PROJECT \
-  "What are the most recent James Webb Space Telescope updates?"
-```
-
-For a service account, set `GOOGLE_APPLICATION_CREDENTIALS` to its JSON key file
-instead of running the ADC login command.
