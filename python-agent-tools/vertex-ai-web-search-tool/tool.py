@@ -72,9 +72,8 @@ class VertexAIWebSearchTool(BaseAgentTool):
         except Exception as error:
             raise RuntimeError("Unable to read Dataiku connection {!r}.".format(name)) from error
         connection_params = info.get_params() or {}
-        project = self.config.get("gcp_project_id") or connection_params.get("projectId")
-        location = (self.config.get("location") or params.get("location") or params.get("region")
-                    or connection_params.get("location") or connection_params.get("region"))
+        project = self.config.get("gcp_project_id") or connection_params.get("project")
+        location = (self.config.get("location") or connection_params.get("region"))
         if not project:
             raise ValueError("Set Google Cloud project ID or configure projectId on connection {!r}.".format(name))
         if not location:
