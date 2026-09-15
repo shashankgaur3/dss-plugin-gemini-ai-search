@@ -82,7 +82,11 @@ class VertexAIWebSearchTool(BaseAgentTool):
             key = params.get("appSecretContent") or params.get("keyPath")
             if not key:
                 raise ValueError("No service-account key found in connection {!r}.".format(name))
-            return service_account.Credentials.from_service_account_info(json.loads(key)), project, location
+            creds = service_account.Credentials.from_service_account_info(
+                json.loads(key),
+                scopes=["https://www.googleapis.com/auth/cloud-platform"]
+            )
+            return creds, project, location
         if params.get("authType") == "OAUTH":
             oauth = params.get("resolvedOAuth2Credential") or info.get_oauth2_credential()
             if oauth and oauth.get("accessToken"):
